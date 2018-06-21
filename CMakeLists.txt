@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(power LANGUAGES CXX)
+project(library LANGUAGES CXX C)
 
 option(test "Build all tests." OFF) 
 
@@ -13,25 +13,33 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 option(test "Build all tests." OFF)
 
-# Set Warning
-if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU" )
-  add_compile_options( -Wall -Wextra -Wunreachable-code -Wpedantic)
-endif()
-if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-  add_compile_options( -Wweak-vtables -Wexit-time-destructors -Wglobal-constructors -Wmissing-noreturn )
-endif()
-if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
-  add_compile_options( /W4 /w44265 /w44061 /w44062 )
-endif()
+# Require packages.
+find_package(Boost REQUIRED)
 
-add_library(pow_lib src/pow.cc)
-add_executable(pow src/main.cc)
-target_link_libraries(pow pow_lib)
-
+# Set include
+include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
+add_library(sqlite STATIC
+	src/sqlite3.c)
+add_executable(library src/main.cc)
+target_link_libraries(library sqlite)
+
+
 if (test)
-  add_subdirectory(lib/gtest)
+
+	# Set Warning
+	if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU" )
+		add_compile_options(-Wall -Wextra -Wunreachable-code -Wpedantic)
+	endif()
+	if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+		add_compile_options(-Wweak-vtables -Wexit-time-destructors -Wglobal-constructors -Wmissing-noreturn )
+	endif()
+	if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+		add_compile_options(/W4 /w44265 /w44061 /w44062 )
+	endif()
+
+ add_subdirectory(lib/gtest)
 
   enable_testing()
 
@@ -48,7 +56,7 @@ if (test)
   target_link_libraries(runUnitTests gtest gtest_main)
 
   # Extra linking for the project.
-  target_link_libraries(runUnitTests pow_lib)
+  target_link_libraries(runUnitTests sqlite)
 
   # This is so you can do 'make test' to see all your tests run, instead of
   # manually running the executable runUnitTests to see those specific tests.
