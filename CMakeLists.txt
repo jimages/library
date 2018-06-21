@@ -25,10 +25,10 @@ if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
 endif()
 
 add_library(pow_lib src/pow.cc)
-add_executable(pow src/main.cc src/pow.h)
+add_executable(pow src/main.cc)
 target_link_libraries(pow pow_lib)
 
-include_directories(${PROJECT_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 if (test)
   add_subdirectory(lib/gtest)
