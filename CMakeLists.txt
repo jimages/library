@@ -12,6 +12,11 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 option(test "Build all tests." OFF)
+option(debug "debug mode." OFF)
+
+if (debug)
+	set(CMAKE_BUILD_TYPE Debug)
+endif()
 
 # Require packages.
 find_package(Boost REQUIRED)
@@ -24,7 +29,6 @@ add_library(sqlite STATIC
 	src/sqlite3.c)
 add_executable(library src/main.cc)
 target_link_libraries(library sqlite)
-
 
 if (test)
 

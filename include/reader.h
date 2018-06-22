@@ -21,7 +21,7 @@ class Reader: public Model{
 	std::list<Book> _rent;
 	std::string _password;
 	
-	
+	friend class DatSource;
 	bool reset(const std::string &p) {
 		_password = p;
 		return true;

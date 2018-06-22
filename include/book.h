@@ -18,6 +18,7 @@ class Book : public Model {
 	std::string _index;
 	int _volume = 0;
 	int _available = 0;
+	friend class DatSource;
 public:
 	// Constructor
 	Book() = default;
