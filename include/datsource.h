@@ -124,6 +124,12 @@ public:
 	{
 		DatInit();
 	}
+
+	~DatSource()
+	{
+		sqlite3_close(con);
+	}
+
 	int insert_book(const Book &b)
 	{
 		std::string sql = boost::str(boost::format(

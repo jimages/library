@@ -3,14 +3,23 @@
 #include "datsource.h"
 #include "gtest/gtest.h"
 
-TEST(DatSource, Init) {
-	ASSERT_NO_THROW(DatSource d);
+class DatSourceTest : public ::testing::Test {
+protected:
+	DatSource *ptr;
+	virtual void SetUp() {
+	}
+};
+
+TEST_F(DatSourceTest, Init) {
+	ASSERT_NO_THROW(ptr = new DatSource());
 }
-TEST(DatSource, Book) {
-	DatSource data;
-	Book b("name","index");
-	EXPECT_NO_THROW(data.insert_book(b));
+TEST_F(DatSourceTest, Book) {
+	EXPECT_NO_THROW({
+		Book b("name","index");
+		ptr->insert_book(b);
+		});
 }
+
 
 int main(int argc, char **argv)
 {
