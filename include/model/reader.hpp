@@ -9,36 +9,35 @@
  */
 #ifndef JI_READER_CLASS
 #define JI_READER_CLASS
+#include "model/sqlite.hpp"
 #include <string>
-#include <list>
-#include <type_traits>
-#include "book.h"
-#include "model.h"
-class Reader: public Model{
-	int id;
-	std::string _name;
-	std::string _num;	
-	std::list<Book> _rent;
-	std::string _password;
+#include <cstdint>
+class Book;
+class Reader {
+public:
+	// nid就是说不存在id
+	const int nid = INT_MAX;
+private:
 	
 	friend class DatSource;
 	bool reset(const std::string &p) {
-		_password = p;
+		password = p;
 		return true;
 	}
 public:
 	// Constructor
 	Reader() = default;
 	Reader(const std::string &name, const std::string &num, 
-		const std::string password): _name(name), _num(num), _password(password){}
+		const std::string &password): name(name), num(num), password(password){}
 	Reader &operator=(const Reader &reader) = default;
 
-	// bind the readonly var to private var.
-	std::add_const<decltype((_name))>::type name = _name;
-	std::add_const<decltype((_num))>::type num = _num;
-	std::add_const<decltype((_rent))>::type rent = _rent;
-
-
+	int id = nid;
+	std::string name;
+	std::string num;	
+	std::list<Book> rent;
+	std::string password;
 };
+
+
 #endif // JI_READER_CLASS
 

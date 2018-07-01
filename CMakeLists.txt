@@ -27,8 +27,13 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 add_library(sqlite STATIC
 	src/sqlite3.c)
-add_executable(library src/main.cc)
-target_link_libraries(library sqlite)
+add_library(model STATIC
+	src/datasource.cc
+	src/sqlite.cc
+	)
+
+add_executable(library src/main.cc src/menu.cc src/operator.cc )
+target_link_libraries(library sqlite model)
 
 if (test)
 
@@ -44,6 +49,7 @@ if (test)
 	endif()
 
  add_subdirectory(lib/gtest)
+ include_directories(src/)
 
   enable_testing()
 
@@ -57,10 +63,8 @@ if (test)
   add_executable(runUnitTests tests/test.cc)
 
   # Standard linking to gtest stuff.
-  target_link_libraries(runUnitTests gtest gtest_main)
+  target_link_libraries(runUnitTests gtest gtest_main model sqlite)
 
-  # Extra linking for the project.
-  target_link_libraries(runUnitTests sqlite)
 
   # This is so you can do 'make test' to see all your tests run, instead of
   # manually running the executable runUnitTests to see those specific tests.
